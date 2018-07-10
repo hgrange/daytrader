@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><server>
+<!--These elements have been identified from this application's configuration.-->
+<featureManager>
+<feature>jsp-2.3</feature>
+<feature>servlet-3.1</feature>
+<feature>mdb-3.2</feature>
+<feature>jms-2.0</feature>
+<feature>jdbc-4.1</feature>
+<feature>wasJmsServer-1.0</feature>
+<feature>wasJmsClient-2.0</feature>
+</featureManager>
+<httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+<authData id="TradeDataSourceAuthData" password="???" user="db2inst1"/>
+<jmsQueue id="TradeBrokerQueue" jndiName="jms/TradeBrokerQueue">
+        <properties.wasJms deliveryMode="NonPersistent" queueName="TradeBrokerJSD"/>
+    </jmsQueue>
+<jmsTopic id="TradeStreamerTopic" jndiName="jms/TradeStreamerTopic">
+        <properties.wasJms deliveryMode="NonPersistent" topicName="TradeStreamerTopic" topicSpace="Trade.Topic.Space"/>
+    </jmsTopic>
+<jmsQueueConnectionFactory id="TradeBrokerQCF" jndiName="jms/TradeBrokerQCF">
+        <properties.wasJms/>
+    </jmsQueueConnectionFactory>
+<jmsTopicConnectionFactory id="TradeStreamerTCF" jndiName="jms/TradeStreamerTCF">
+        <properties.wasJms/>
+    </jmsTopicConnectionFactory>
+<jdbcDriver id="DB2_Universal_JDBC_Driver_Provider_Only_(XA)" javax.sql.DataSource="com.ibm.db2.jcc.DB2XADataSource">
+        <library>
+            <!-- <file name="/opt/IBM/db2_drivers/db2jcc.jar"/> --><file name="/config/lib/db2jcc.jar"/>
+            <!-- <file name="/opt/IBM/db2_drivers/db2jcc_license_cu.jar"/> --><file name="/config/lib/db2jcc_license_cu.jar"/>
+        </library>
+    </jdbcDriver>
+<dataSource containerAuthDataRef="TradeDataSourceAuthData" id="TradeDataSource" jdbcDriverRef="DB2_Universal_JDBC_Driver_Provider_Only_(XA)" jndiName="jdbc/TradeDataSource">
+        <properties.db2.jcc beginTranForResultSetScrollingAPIs="false" beginTranForVendorAPIs="false" connectionSharing="1" databaseName="tradedb" enableMultithreadedAccessDetection="false" errorDetectionModel="ExceptionMapping" name="TradeDataSource" nonTransactionalDataSource="false" portNumber="50000" preTestSQLString="SELECT CURRENT SQLID FROM SYSIBM.SYSDUMMY1" propagateClientIdentityUsingTrustedContext="false" reauthentication="false" retrieveMessagesFromServerOnGetMessage="false" serverName="localhost" statementCacheSize="60" traceLevel="-1" unbindClientRerouteListFromJndi="false" useTransactionRedirect="false" validateNewConnection="false" validateNewConnectionRetryCount="100" validateNewConnectionRetryInterval="3"/>
+        <connectionManager agedTimeout="0" connectionTimeout="180" maxIdleTime="1800" maxPoolSize="50" minPoolSize="10" reapTime="180"/>
+    </dataSource>
+<dataSource containerAuthDataRef="TradeDataSourceAuthData" id="NoTxTradeDataSource" jdbcDriverRef="DB2_Universal_JDBC_Driver_Provider_Only_(XA)" jndiName="jdbc/NoTxTradeDataSource">
+        <properties.db2.jcc beginTranForResultSetScrollingAPIs="false" beginTranForVendorAPIs="false" connectionSharing="1" databaseName="tradedb" enableMultithreadedAccessDetection="false" errorDetectionModel="ExceptionMapping" name="NoTxTradeDataSource" nonTransactionalDataSource="true" portNumber="50000" preTestSQLString="SELECT CURRENT SQLID FROM SYSIBM.SYSDUMMY1" propagateClientIdentityUsingTrustedContext="false" reauthentication="false" retrieveMessagesFromServerOnGetMessage="false" serverName="localhost" traceLevel="-1" unbindClientRerouteListFromJndi="false" useTransactionRedirect="false" validateNewConnection="false" validateNewConnectionRetryCount="100" validateNewConnectionRetryInterval="3"/>
+        <connectionManager agedTimeout="0" connectionTimeout="180" maxIdleTime="1800" maxPoolSize="50" minPoolSize="10" reapTime="180"/>
+    </dataSource>
+<!-- <variable name="DERBY_JDBC_DRIVER_PATH" value="${WAS_INSTALL_ROOT}/derby/lib"/> -->
+<variable name="DERBY_JDBC_DRIVER_PATH" value="/config/lib"/>
+<variable name="DB2UNIVERSAL_JDBC_DRIVER_NATIVEPATH" value=""/>
+<!--These elements are from the profile level configuration. Not all of them may be necessary for your applicaiton.-->
+<!--<messagingEngine>
+        <queue id="TradeBrokerQueue"/>
+        <topicSpace id="TradeStreamerTopic"/>
+    </messagingEngine>--><!--<jmsActivationSpec id="TradeBrokerMDBSpec">
+        <properties.wasJms destinationType="javax.jms.Queue"/>
+    </jmsActivationSpec>--><!--<jmsActivationSpec id="TradeStreamerMDBSpec">
+        <properties.wasJms destinationType="javax.jms.Topic"/>
+    </jmsActivationSpec>--><!--<dataSource containerAuthDataRef="PlantsAlias" id="PlantsByWebSphereDataSource" jdbcDriverRef="DB2_Universal_JDBC_Driver_Provider_Only_(XA)" jndiName="jdbc/PlantsByWebSphereDataSource">
+        <properties.db2.jcc beginTranForResultSetScrollingAPIs="false" beginTranForVendorAPIs="false" connectionSharing="1" databaseName="PLANTSDB" enableMultithreadedAccessDetection="false" errorDetectionModel="ExceptionMapping" name="PlantsByWebSphereDataSource" nonTransactionalDataSource="false" portNumber="50000" preTestSQLString="SELECT CURRENT SQLID FROM SYSIBM.SYSDUMMY1" propagateClientIdentityUsingTrustedContext="false" reauthentication="false" retrieveMessagesFromServerOnGetMessage="false" serverName="localhost" traceLevel="-1" unbindClientRerouteListFromJndi="false" useTransactionRedirect="false" validateNewConnection="false" validateNewConnectionRetryCount="100" validateNewConnectionRetryInterval="3"/>
+        <connectionManager agedTimeout="0" connectionTimeout="180" maxIdleTime="1800" maxPoolSize="10" minPoolSize="1" reapTime="180"/>
+    </dataSource>--><!--<dataSource containerAuthDataRef="PlantsAlias" id="PlantsByWebSphereDataSourceNONJTA" jdbcDriverRef="DB2_Universal_JDBC_Driver_Provider" jndiName="jdbc/PlantsByWebSphereDataSourceNONJTA">
+        <properties.db2.jcc beginTranForResultSetScrollingAPIs="false" beginTranForVendorAPIs="false" connectionSharing="1" databaseName="PLANTSDB" enableMultithreadedAccessDetection="false" errorDetectionModel="ExceptionMapping" jmsOnePhaseOptimization="false" name="PlantsByWebSphereDataSourceNONJTA" nonTransactionalDataSource="true" portNumber="50000" preTestSQLString="SELECT CURRENT SQLID FROM SYSIBM.SYSDUMMY1" propagateClientIdentityUsingTrustedContext="false" reauthentication="false" retrieveMessagesFromServerOnGetMessage="true" serverName="localhost" traceLevel="-1" unbindClientRerouteListFromJndi="false" useTransactionRedirect="false" validateNewConnection="false" validateNewConnectionRetryCount="100" validateNewConnectionRetryInterval="3"/>
+        <connectionManager agedTimeout="0" connectionTimeout="180" maxIdleTime="1800" maxPoolSize="10" minPoolSize="1" reapTime="180"/>
+    </dataSource>--><!--<jdbcDriver id="DB2_Universal_JDBC_Driver_Provider" javax.sql.DataSource="com.ibm.db2.jcc.DB2ConnectionPoolDataSource">
+        <library>
+            <file name="/opt/IBM/db2_drivers/db2jcc.jar"/>
+            <file name="/opt/IBM/db2_drivers/db2jcc_license_cu.jar"/>
+        </library>
+    </jdbcDriver>--><!--<authData id="TradeAdminAuthData" password="???" user="virtuser"/>--><!--<authData id="PlantsAlias" password="???" user="db2inst1"/>--></server>
